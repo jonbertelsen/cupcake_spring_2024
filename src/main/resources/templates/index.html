@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>The archive</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+
+<body>
+
+<div class="page">
+    <header>
+
+    </header>
+
+    <h1>Cupcake</h1>
+
+    <form method="post">
+        <select name="top">
+            <option th:each="top: ${session.topMap.values()}" th:value="${top.topId}"
+                    th:text="${top.name + ' (' + top.price + ') kr.'}">5 kr
+            </option>
+        </select>
+        <select name="bottom">
+            <option th:each="bottom: ${session.bottomMap.values()}" th:value="${bottom.bottomId}"
+                    th:text="${bottom.name + ' (' + bottom.price + ') kr.'}">5 kr
+            </option>
+        </select>
+        <input type="number" name="quantity" required min="1" max="10"/>
+        <button type="submit" formaction="addtocart">Tilføj til kurv</button>
+    </form>
+
+    <p th:text="${'Antal rækker i kurv: ' + session.cart.getCount()}"></p>
+
+    <h1>Kurv</h1>
+    <form method="post">
+        <table>
+            <tr th:each="item, indexStatus: ${session.cart.cartItemList}">
+                <td th:text="${indexStatus.count}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td th:text="${item.top.name}"></td>
+                <td th:text="${item.bottom.name}"></td>
+                <td th:text="${item.getPrice() + ' kr.'}"></td>
+                <td>
+                    <button type="submit" name="rowindex" formaction="/deletefromcart" th:value="${indexStatus.count}">
+                        Fjern
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td th:text="${session.cart.getTotalPrice() + ' kr.'}"></td>
+                <td></td>
+            </tr>
+        </table>
+        <button type="submit" formaction="/checkout">Checkout</button>
+    </form>
+
+
+</div>
+</body>
+</html>
